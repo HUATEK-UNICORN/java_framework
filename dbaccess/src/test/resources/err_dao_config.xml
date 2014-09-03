@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataaccesss>
+	<statementss>
+		<statements id="selectYyy" collectionType="both:array:list"
+			unitType="map:array" quantity="int:long" type="query:modification">
+			<![CDATA[
+			select y.xx, y.yy, y.zz 
+			from yyy y
+			where y.a = ? and (y.b = ? or y.c = ?)
+			]]>
+		</statements>
+		
+		<statement id="insertXx" collectionType="both:array:list"
+			unitType="map:array" quantity="int:long" type="query:modification">
+			<![CDATA[
+			insert into xx values(?, ?, ?, ?)
+			]]>
+		</statement>
+		
+		<statement id="updateZz" collectionType="both:array:list"
+			unitType="map:array" quantity="int:long" type="query:modification">
+			<![CDATA[
+			update zz set zz.x = ?, zz.y = ?, zz.z = ?
+			]]>
+		</statement>
+		
+		<statement id="deleteAa" collectionType="both:array:list"
+			unitType="map:array" quantity="int:long" type="query:modification">
+			<![CDATA[
+			delete aa where aa.b = ?
+			]]>
+		</statement>
+	</statements>
+
+</dataaccess>
