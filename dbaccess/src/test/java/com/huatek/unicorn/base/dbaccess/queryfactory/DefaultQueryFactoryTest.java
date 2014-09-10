@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.sql.DataSource;
+import javax.sql.XADataSource;
 
 import org.hsqldb.jdbc.JDBCDataSourceFactory;
 import org.junit.AfterClass;
@@ -26,6 +27,8 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 
 	@BeforeClass
 	public static void prepare() throws Exception {
+		
+		
 		
 //		Properties props = new Properties();
 //		props.setProperty("url", "jdbc:hsqldb:mem:DefaultQueryFactoryTest");

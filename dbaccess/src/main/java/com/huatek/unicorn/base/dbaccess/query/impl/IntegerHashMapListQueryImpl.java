@@ -1,5 +1,6 @@
 package com.huatek.unicorn.base.dbaccess.query.impl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class IntegerHashMapListQueryImpl implements IntegerMapListQuery {
 
 	@Override
 	public Integer count(Object... params) throws SQLException {
-		return queryRunner.query(countStatement, new ScalarHandler<Long>(),
+		return queryRunner.query(countStatement, new ScalarHandler<Number>(),
 				params).intValue();
 	}
 

@@ -1,5 +1,6 @@
 package com.huatek.unicorn.base.dbaccess.query.impl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,8 @@ public class LongHashMapListQueryImpl implements LongMapListQuery {
 
 	@Override
 	public Long count(Object... params) throws SQLException {
-		return queryRunner.query(countStatement, new ScalarHandler<Long>(),
-				params);
+		return queryRunner.query(countStatement, new ScalarHandler<BigDecimal>(),
+				params).longValue();
 	}
 
 	@Override

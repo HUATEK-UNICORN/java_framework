@@ -3,19 +3,13 @@
 	<statements>
 		<statement id="selectSysTables" type="query">
 			<![CDATA[
-			SELECT * FROM INFORMATION_SCHEMA.TABLES
+			SELECT * FROM TABS
 			]]>
 		</statement>
 		
 		<statement id="selectSysTables2" type="query">
 			<![CDATA[
-			SELECT * FROM INFORMATION_SCHEMA.TABLES where 1=1
-			]]>
-		</statement>
-		
-		<statement id="selectSysTablesByParam" type="query">
-			<![CDATA[
-			SELECT * FROM INFORMATION_SCHEMA.TABLES x where x.TABLE_NAME like ?
+			SELECT * FROM TABS where 1= 1
 			]]>
 		</statement>
 		
@@ -54,17 +48,6 @@
 			]]>
 		</statement>
 		
-		<statement id="updateZz" type="modification">
-			<![CDATA[
-			update zz set zz.x = ?, zz.y = ?, zz.z = ?
-			]]>
-		</statement>
-		
-		<statement id="deleteAa" type="modification">
-			<![CDATA[
-			delete aa where aa.b = ?
-			]]>
-		</statement>
 	</statements>
 
 </dataaccess>
