@@ -82,6 +82,8 @@ public class IntegerObjectsListModificationImpl implements
 			conn.setAutoCommit(false);
 			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
+			pstmt = conn.prepareStatement(this.orignalStatement);
+			
 			int affectsRowCount = 0;
 			if (this.dialect.supportsBatchUpdates()) {
 				affectsRowCount = executeBatch(conn, pstmt, dataArray,
@@ -123,7 +125,7 @@ public class IntegerObjectsListModificationImpl implements
 			List<Object[]> dataArray, Integer countOfPerCommit,
 			boolean rollbackWhenError) throws SQLException {
 
-		pstmt = conn.prepareStatement(this.orignalStatement);
+		
 		Savepoint txBegin = conn.setSavepoint();
 
 		int commitCount = (dataArray.size() / countOfPerCommit) + 1;
@@ -166,7 +168,6 @@ public class IntegerObjectsListModificationImpl implements
 			List<Object[]> dataArray, Integer countOfPerCommit,
 			boolean errorBreak) throws SQLException {
 
-		pstmt = conn.prepareStatement(this.orignalStatement);
 		Savepoint txBegin = conn.setSavepoint();
 
 		int commitCount = (dataArray.size() / countOfPerCommit) + 1;

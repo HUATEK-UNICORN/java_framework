@@ -1,15 +1,10 @@
 package com.huatek.unicorn.base.dbaccess.query.impl;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.MapHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-
 import com.huatek.unicorn.base.dbaccess.dialect.Dialect;
 import com.huatek.unicorn.base.dbaccess.query.IntegerMapListQuery;
 
@@ -37,27 +32,27 @@ public class IntegerHashMapListQueryImpl implements IntegerMapListQuery {
 
 	@Override
 	public Integer count(Object... params) throws SQLException {
-		return queryRunner.query(countStatement, new ScalarHandler<Number>(),
-				params).intValue();
+		return queryRunner.query(countStatement, DefaultHandlers.DEFAULT_NUM_HANDLER, params)
+				.intValue();
 	}
 
 	@Override
 	public List<Map<String, Object>> all(Object... params) throws SQLException {
-		return queryRunner
-				.query(orignalStatement, new MapListHandler(), params);
+		return queryRunner.query(orignalStatement, DefaultHandlers.DEFAULT_MAP_LIST_HANDLER,
+				params);
 	}
 
 	@Override
 	public List<Map<String, Object>> page(Integer first,
 			Integer countOfPerPage, Object... params) throws SQLException {
-		return queryRunner.query(pageStatement, new MapListHandler(),
+		return queryRunner.query(pageStatement, DefaultHandlers.DEFAULT_MAP_LIST_HANDLER,
 				this.dialect.transformPageParameters(first, countOfPerPage,
 						params));
 	}
 
 	@Override
 	public Map<String, Object> firstRow(Object... params) throws SQLException {
-		return queryRunner.query(orignalStatement, new MapHandler(), params);
+		return queryRunner.query(orignalStatement, DefaultHandlers.DEFAULT_MAP_HANDLER, params);
 	}
 
 }

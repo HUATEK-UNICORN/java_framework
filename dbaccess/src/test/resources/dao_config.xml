@@ -31,7 +31,27 @@
 				b6 varchar(20),
 				b7 varchar(20),
 				b8 varchar(20),
-				b9 varchar(20)
+				b9 varchar(20),
+				b10 varchar(20),
+				b11 varchar(20),
+				b12 varchar(20),
+				b13 varchar(20),
+				b14 varchar(20),
+				b15 varchar(20),
+				b16 varchar(20),
+				b17 varchar(20),
+				b18 varchar(20),
+				b19 varchar(20),
+				b20 varchar(20),
+				b21 varchar(20),
+				b22 varchar(20),
+				b23 varchar(20),
+				b24 varchar(20),
+				b25 varchar(20),
+				b26 varchar(20),
+				b27 varchar(20),
+				b28 varchar(20),
+				b29 varchar(20)
 			)
 			]]>
 		</statement>
@@ -44,7 +64,7 @@
 		
 		<statement id="insertXxx" type="modification">
 			<![CDATA[
-			insert into xxx values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			insert into xxx values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			]]>
 		</statement>
 		

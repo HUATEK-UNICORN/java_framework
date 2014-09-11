@@ -31,12 +31,15 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 	@BeforeClass
 	public static void prepare() throws Exception {
 
+		System.out.print("prepare...");
+
 		queryFactory = new DefaultDbaccessFactory();
 		queryFactory.setConfigPaths(new String[] { "/oracle_config.xml" });
-//		queryFactory
-//				.setDataSource(setupDataSource("jdbc:oracle:thin:@192.168.128.163:1521:undb"));
-		queryFactory
-		.setDataSource(setupPoolDataSource("jdbc:oracle:thin:@192.168.128.163:1521:undb", "testins", "6yhn*IK<"));
+		// queryFactory
+		// .setDataSource(setupDataSource("jdbc:oracle:thin:@192.168.128.163:1521:undb"));
+		queryFactory.setDataSource(setupPoolDataSource(
+				"jdbc:oracle:thin:@192.168.128.163:1521:undb", "testins",
+				"6yhn*IK<"));
 		queryFactory.setDialect(new OracleDialect());
 
 		try {
@@ -48,6 +51,18 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 		IntegerObjectsListModification integerObjectsListModification = queryFactory
 				.getIntegerObjectsListModification("createTableXXX");
 		integerObjectsListModification.modify();
+
+		// prepare data
+		IntegerObjectsListModification insertXxx = queryFactory
+				.getIntegerObjectsListModification("insertXxx");
+		int batchUnit = 64;
+		String[] strs = new String[10];
+		Object[][] strsArr = new String[10000][];
+		Arrays.fill(strs, "test1test2test3test4");
+		Arrays.fill(strsArr, strs);
+		insertXxx.batch(Arrays.asList(strsArr), batchUnit);
+
+		System.out.println(" done.");
 	}
 
 	@AfterClass
@@ -66,6 +81,26 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 		return ds;
 	}
 
+	@Test
+	public void testSelectXxx() throws Exception {
+
+		System.out.print("start testing...");
+
+		IntegerMapListQuery selectXxx = queryFactory
+				.getIntegerMapListQuery("selectXxx");
+
+		long start = System.currentTimeMillis();
+
+		for (int i = 0; i < 100; i++) {
+			List<Map<String, Object>> m = selectXxx.all();
+		}
+
+		long finished = System.currentTimeMillis();
+		System.out.println("selectXxx.all() --- Elapse: " + (finished - start)
+				+ "(ms)");
+		System.out.println(" done.");
+	}
+
 	// @Test
 	// public void testInsert() throws Exception {
 	// IntegerObjectsListModification integerObjectsListModification =
@@ -80,120 +115,102 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 	// System.out.println(integerMapListQuery.count());
 	// }
 	//
-	 @Test
-	 public void testBatchInsert() throws Exception {
-	 IntegerObjectsListModification integerObjectsListModification =
-	 queryFactory
-	 .getIntegerObjectsListModification("insertXxx");
-	
-	 int batchUnit = 64;
-	
-	 String[] strs = new String[10];
-	 Object[][] strsArr = new String[100000][];
-	 Arrays.fill(strs, "test1test2test3test4");
-	 Arrays.fill(strsArr, strs);
-	
-//	 long start = System.currentTimeMillis();
-//	 integerObjectsListModification.batch(Arrays.asList(strsArr));
-//	 long finished = System.currentTimeMillis();
-//	 System.out.println("integerObjectsListModification.batch(Arrays.asList(strsArr)) --- Elapse: "
-//	 + (finished - start) + "(ms)");
-//	 System.out
-//	 .println("--------------------------------------------------------------");
-	
-	 // -------------------------------------------
-	
-	 long startx = System.currentTimeMillis();
-	 integerObjectsListModification.batch(Arrays.asList(strsArr), batchUnit);
-	 long finishedx = System.currentTimeMillis();
-	 System.out.println("integerObjectsListModification.batch(Arrays.asList(strsArr), batchUnit); --- Elapse: "
-	 + (finishedx - startx) + "(ms)");
-	 System.out
-	 .println("--------------------------------------------------------------");
-	
-	 IntegerMapListQuery integerMapListQuery = queryFactory
-	 .getIntegerMapListQuery("selectXxx");
-	 System.out.println(integerMapListQuery.count());
-	 }
 
-//	@Test
-//	public void testGetIntegerPerformance() throws Exception {
-//
-//		int loops = 1000 * 1;
-//
-//		IntegerMapListQuery integerMapListQuery = queryFactory
-//				.getIntegerMapListQuery("selectSysTables");
-//		System.out.println(integerMapListQuery);
-//
-//		long start = System.currentTimeMillis();
-//		for (int i = 0; i < loops; i++) {
-//			 List<Map<String, Object>> result = integerMapListQuery.all();
-////			int result = integerMapListQuery.count();
-//		}
-//		long finished = System.currentTimeMillis();
-//
-//		System.out.println("Elapse: " + (finished - start) + "(ms)");
-//		System.out
-//				.println("--------------------------------------------------------------");
-//	}
-//
-//	@Test
-//	public void testGetIntegerPerformance2() throws Exception {
-//
-//		int loops = 1000 * 1;
-//
-//		IntegerMapListQuery integerMapListQuery = queryFactory
-//				.getIntegerMapListQuery("selectSysTables2");
-//		System.out.println(integerMapListQuery);
-//
-//		long start = System.currentTimeMillis();
-//		for (int i = 0; i < loops; i++) {
-//			 List<Map<String, Object>> result = integerMapListQuery.all();
-////			int result = integerMapListQuery.count();
-//		}
-//		long finished = System.currentTimeMillis();
-//
-//		System.out.println("Elapse: " + (finished - start) + "(ms)");
-//		System.out
-//				.println("--------------------------------------------------------------");
-//	}
+	// @Test
+	// public void testBatchInsert() throws Exception {
+	// IntegerObjectsListModification integerObjectsListModification =
+	// queryFactory
+	// .getIntegerObjectsListModification("insertXxx");
+	//
+	// int batchUnit = 64;
+	//
+	// String[] strs = new String[10];
+	// Object[][] strsArr = new String[100000][];
+	// Arrays.fill(strs, "test1test2test3test4");
+	// Arrays.fill(strsArr, strs);
+	//
+	// // long start = System.currentTimeMillis();
+	// // integerObjectsListModification.batch(Arrays.asList(strsArr));
+	// // long finished = System.currentTimeMillis();
+	// //
+	// System.out.println("integerObjectsListModification.batch(Arrays.asList(strsArr)) --- Elapse: "
+	// // + (finished - start) + "(ms)");
+	// // System.out
+	// //
+	// .println("--------------------------------------------------------------");
+	//
+	// // -------------------------------------------
+	//
+	// long startx = System.currentTimeMillis();
+	// integerObjectsListModification.batch(Arrays.asList(strsArr), batchUnit);
+	// long finishedx = System.currentTimeMillis();
+	// System.out
+	// .println("integerObjectsListModification.batch(Arrays.asList(strsArr), batchUnit); --- Elapse: "
+	// + (finishedx - startx) + "(ms)");
+	// System.out
+	// .println("--------------------------------------------------------------");
+	//
+	// IntegerMapListQuery integerMapListQuery = queryFactory
+	// .getIntegerMapListQuery("selectXxx");
+	// System.out.println(integerMapListQuery.count());
+	// }
 
-	public static DataSource setupPoolDataSource(String connectURI, String username, String password) {
-		//
-		// First, we'll create a ConnectionFactory that the
-		// pool will use to create Connections.
-		// We'll use the DriverManagerConnectionFactory,
-		// using the connect string passed in the command line
-		// arguments.
-		//
+	// @Test
+	// public void testGetIntegerPerformance() throws Exception {
+	//
+	// int loops = 1000 * 1;
+	//
+	// IntegerMapListQuery integerMapListQuery = queryFactory
+	// .getIntegerMapListQuery("selectSysTables");
+	// System.out.println(integerMapListQuery);
+	//
+	// long start = System.currentTimeMillis();
+	// for (int i = 0; i < loops; i++) {
+	// List<Map<String, Object>> result = integerMapListQuery.all();
+	// // int result = integerMapListQuery.count();
+	// }
+	// long finished = System.currentTimeMillis();
+	//
+	// System.out.println("Elapse: " + (finished - start) + "(ms)");
+	// System.out
+	// .println("--------------------------------------------------------------");
+	// }
+	//
+	// @Test
+	// public void testGetIntegerPerformance2() throws Exception {
+	//
+	// int loops = 1000 * 1;
+	//
+	// IntegerMapListQuery integerMapListQuery = queryFactory
+	// .getIntegerMapListQuery("selectSysTables2");
+	// System.out.println(integerMapListQuery);
+	//
+	// long start = System.currentTimeMillis();
+	// for (int i = 0; i < loops; i++) {
+	// List<Map<String, Object>> result = integerMapListQuery.all();
+	// // int result = integerMapListQuery.count();
+	// }
+	// long finished = System.currentTimeMillis();
+	//
+	// System.out.println("Elapse: " + (finished - start) + "(ms)");
+	// System.out
+	// .println("--------------------------------------------------------------");
+	// }
+
+	public static DataSource setupPoolDataSource(String connectURI,
+			String username, String password) {
+
 		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
 				connectURI, username, password);
 
-		//
-		// Next we'll create the PoolableConnectionFactory, which wraps
-		// the "real" Connections created by the ConnectionFactory with
-		// the classes that implement the pooling functionality.
-		//
 		PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
 				connectionFactory, null);
 
-		//
-		// Now we'll need a ObjectPool that serves as the
-		// actual pool of connections.
-		//
-		// We'll use a GenericObjectPool instance, although
-		// any ObjectPool implementation will suffice.
-		//
 		ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<PoolableConnection>(
 				poolableConnectionFactory);
 
-		// Set the factory's pool property to the owning pool
 		poolableConnectionFactory.setPool(connectionPool);
 
-		//
-		// Finally, we create the PoolingDriver itself,
-		// passing in the object pool we created.
-		//
 		PoolingDataSource<PoolableConnection> dataSource = new PoolingDataSource<>(
 				connectionPool);
 
