@@ -20,8 +20,8 @@ import org.junit.Test;
 
 import com.huatek.unicorn.base.dbaccess.dialect.OracleDialect;
 import com.huatek.unicorn.base.dbaccess.factory.impl.DefaultDbaccessFactory;
-import com.huatek.unicorn.base.dbaccess.modification.IntegerObjectsListModification;
-import com.huatek.unicorn.base.dbaccess.query.IntegerMapListQuery;
+import com.huatek.unicorn.base.dbaccess.modification.Modification;
+import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
 public class OracleQueryFactoryTest extends BaseTestCase {
@@ -48,13 +48,13 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 			e.printStackTrace();
 		}
 
-		IntegerObjectsListModification integerObjectsListModification = queryFactory
-				.getIntegerObjectsListModification("createTableXXX");
-		integerObjectsListModification.modify();
+		Modification<Object[]> createTableXXX = queryFactory
+				.getModification("createTableXXX");
+		createTableXXX.merge();
 
 		// prepare data
-		IntegerObjectsListModification insertXxx = queryFactory
-				.getIntegerObjectsListModification("insertXxx");
+		Modification<Object[]> insertXxx = queryFactory
+				.getModification("insertXxx");
 		int batchUnit = 64;
 		String[] strs = new String[10];
 		Object[][] strsArr = new String[10000][];
@@ -67,9 +67,9 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 
 	@AfterClass
 	public static void destory() throws Exception {
-		IntegerObjectsListModification integerObjectsListModification = queryFactory
-				.getIntegerObjectsListModification("dropTableXXX");
-		integerObjectsListModification.modify();
+		Modification<Object[]> dropTableXXX = queryFactory
+				.getModification("dropTableXXX");
+		dropTableXXX.merge();
 	}
 
 	public static DataSource setupDataSource(String connectURI) {
@@ -86,13 +86,13 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 
 		System.out.print("start testing...");
 
-		IntegerMapListQuery selectXxx = queryFactory
-				.getIntegerMapListQuery("selectXxx");
+		Query<Map<String, Object>> query = queryFactory
+				.getQuery("selectXxx");
 
 		long start = System.currentTimeMillis();
 
 		for (int i = 0; i < 100; i++) {
-			List<Map<String, Object>> m = selectXxx.all();
+			List<Map<String, Object>> m = query.all();
 		}
 
 		long finished = System.currentTimeMillis();

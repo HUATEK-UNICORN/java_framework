@@ -1,15 +1,16 @@
 package com.huatek.unicorn.base.dbaccess.modification;
 
 import java.sql.SQLException;
+import java.util.List;
 
-public interface Modification<U, Q extends Number, C> {
+public interface Modification<E> {
 
-	Q modify() throws SQLException;
-	
-	Q modify(U data) throws SQLException;
-	
-	Q batch(C dataArray) throws SQLException;
-	
-	Q batch(C dataArray, Q countOfPerCommit) throws SQLException;
-	
+	Integer merge() throws SQLException;
+
+	Integer merge(E data) throws SQLException;
+
+	Integer batch(List<E> dataArray) throws SQLException;
+
+	Integer batch(List<E> dataArray, Integer countOfPerCommit)
+			throws SQLException;
 }

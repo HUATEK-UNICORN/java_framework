@@ -1,14 +1,11 @@
 package com.huatek.unicorn.base.dbaccess.factory;
 
-import com.huatek.unicorn.base.dbaccess.modification.IntegerObjectsListModification;
-import com.huatek.unicorn.base.dbaccess.query.IntegerMapListQuery;
-import com.huatek.unicorn.base.dbaccess.query.LongMapListQuery;
+import com.huatek.unicorn.base.dbaccess.modification.Modification;
+import com.huatek.unicorn.base.dbaccess.query.Query;
 
-public interface DbaccessFactory {
+public interface DbaccessFactory<E, P> {
 	
-	IntegerMapListQuery getIntegerMapListQuery(String identity);
+	Query<E> getQuery(String identity);
 	
-	LongMapListQuery getLongMapListQuery(String identity);
-	
-	IntegerObjectsListModification getIntegerObjectsListModification(String identity);
+	Modification<P> getModification(String identity);
 }

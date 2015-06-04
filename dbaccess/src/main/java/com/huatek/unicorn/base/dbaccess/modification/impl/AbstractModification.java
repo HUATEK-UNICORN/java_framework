@@ -1,5 +1,7 @@
 package com.huatek.unicorn.base.dbaccess.modification.impl;
 
+import static com.huatek.unicorn.base.dbaccess.define.Const.EMPTY_ARRAY_LENGTH;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,54 +12,52 @@ import java.util.List;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 
-import static com.huatek.unicorn.base.dbaccess.define.Const.*;
-
 import com.huatek.unicorn.base.dbaccess.dialect.Dialect;
-import com.huatek.unicorn.base.dbaccess.modification.IntegerObjectsListModification;
+import com.huatek.unicorn.base.dbaccess.modification.Modification;
 
-public class IntegerObjectsListModificationImpl implements
-		IntegerObjectsListModification {
+public abstract class AbstractModification<E> implements Modification<E> {
 
-	private QueryRunner queryRunner;
+	protected QueryRunner queryRunner;
 
-	private Dialect dialect;
-	
-	private String orignalStatement;
+	protected Dialect dialect;
 
-	public IntegerObjectsListModificationImpl(QueryRunner queryRunner,
-			Dialect dialect, 
+	protected String orignalStatement;
+
+	protected AbstractModification(QueryRunner queryRunner, Dialect dialect,
 			String orignalStatement) {
 		this.queryRunner = queryRunner;
 		this.dialect = dialect;
 		this.orignalStatement = orignalStatement;
 	}
 
+	protected abstract Object[] paramsConvert(E data);
+
 	@Override
-	public Integer modify() throws SQLException {
+	public Integer merge() throws SQLException {
 		return queryRunner.update(orignalStatement);
 	}
 
 	@Override
-	public Integer modify(Object[] data) throws SQLException {
-		return queryRunner.update(orignalStatement, data);
+	public Integer merge(E data) throws SQLException {
+		return queryRunner.update(orignalStatement, paramsConvert(data));
 	}
 
 	@Override
-	public Integer batch(List<Object[]> dataArray) throws SQLException {
+	public Integer batch(List<E> dataArray) throws SQLException {
 		return batch(dataArray, dataArray.size());
 	}
 
 	@Override
-	public Integer batch(List<Object[]> dataArray, Integer countOfPerCommit)
+	public Integer batch(List<E> dataArray, Integer countOfPerCommit)
 			throws SQLException {
 
 		return doBatch(dataArray, countOfPerCommit, false);
 	}
 
-	private Integer doBatch(List<Object[]> dataArray, int countOfPerCommit,
+	protected Integer doBatch(List<E> dataArray, int countOfPerCommit,
 			boolean rollbackWhenError) throws SQLException {
 
-		if (null == dataArray || BLANK_ARRAY_LENGTH >= dataArray.size()) {
+		if (null == dataArray || EMPTY_ARRAY_LENGTH >= dataArray.size()) {
 			return 0;
 		}
 
@@ -83,7 +83,7 @@ public class IntegerObjectsListModificationImpl implements
 			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
 			pstmt = conn.prepareStatement(this.orignalStatement);
-			
+
 			int affectsRowCount = 0;
 			if (this.dialect.supportsBatchUpdates()) {
 				affectsRowCount = executeBatch(conn, pstmt, dataArray,
@@ -122,10 +122,9 @@ public class IntegerObjectsListModificationImpl implements
 	 * @return
 	 */
 	private Integer executeBatch(Connection conn, PreparedStatement pstmt,
-			List<Object[]> dataArray, Integer countOfPerCommit,
+			List<E> dataArray, Integer countOfPerCommit,
 			boolean rollbackWhenError) throws SQLException {
 
-		
 		Savepoint txBegin = conn.setSavepoint();
 
 		int commitCount = (dataArray.size() / countOfPerCommit) + 1;
@@ -135,7 +134,8 @@ public class IntegerObjectsListModificationImpl implements
 			int loopLimit = (i + 1) * countOfPerCommit;
 			for (int j = i * countOfPerCommit; j < dataArray.size()
 					&& j < loopLimit; j++) {
-				queryRunner.fillStatement(pstmt, dataArray.get(j));
+				queryRunner.fillStatement(pstmt,
+						paramsConvert(dataArray.get(j)));
 				pstmt.addBatch();
 			}
 			int[] batchResult = pstmt.executeBatch();
@@ -165,8 +165,8 @@ public class IntegerObjectsListModificationImpl implements
 	 * @return
 	 */
 	private Integer emulateBatch(Connection conn, PreparedStatement pstmt,
-			List<Object[]> dataArray, Integer countOfPerCommit,
-			boolean errorBreak) throws SQLException {
+			List<E> dataArray, Integer countOfPerCommit, boolean errorBreak)
+			throws SQLException {
 
 		Savepoint txBegin = conn.setSavepoint();
 
@@ -177,8 +177,10 @@ public class IntegerObjectsListModificationImpl implements
 			int loopLimit = (i + 1) * countOfPerCommit;
 			for (int j = i * countOfPerCommit; j < dataArray.size()
 					&& j < loopLimit; j++) {
+
 				int resultCode = queryRunner.update(conn, orignalStatement,
-						dataArray.get(j));
+						paramsConvert(dataArray.get(j)));
+
 				if (Statement.EXECUTE_FAILED == resultCode) {
 					if (errorBreak) {
 						conn.rollback(txBegin);

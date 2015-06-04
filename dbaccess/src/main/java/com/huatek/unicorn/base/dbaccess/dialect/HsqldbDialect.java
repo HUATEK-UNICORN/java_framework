@@ -27,7 +27,7 @@ public class HsqldbDialect implements Dialect {
 	@Override
 	public Object[] transformPageParameters(Object first,
 			Object countOfPerPage, Object[] params) {
-		if (null == params || BLANK_ARRAY_LENGTH >= params.length) {
+		if (null == params || EMPTY_ARRAY_LENGTH >= params.length) {
 			return new Object[] { countOfPerPage, first };
 		}
 

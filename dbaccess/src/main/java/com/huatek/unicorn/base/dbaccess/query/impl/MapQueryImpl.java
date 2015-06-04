@@ -7,33 +7,13 @@ import java.util.Map;
 import org.apache.commons.dbutils.QueryRunner;
 
 import com.huatek.unicorn.base.dbaccess.dialect.Dialect;
-import com.huatek.unicorn.base.dbaccess.query.LongMapListQuery;
 
-public class LongHashMapListQueryImpl implements LongMapListQuery {
+public class MapQueryImpl extends AbstractQuery<Map<String, Object>> {
 
-	private QueryRunner queryRunner;
-
-	private Dialect dialect;
-
-	private String orignalStatement;
-
-	private String countStatement;
-
-	private String pageStatement;
-
-	public LongHashMapListQueryImpl(QueryRunner queryRunner, Dialect dialect,
+	public MapQueryImpl(QueryRunner queryRunner, Dialect dialect,
 			String orignalStatement, String countStatement, String pageStatement) {
-		this.queryRunner = queryRunner;
-		this.dialect = dialect;
-		this.orignalStatement = orignalStatement;
-		this.countStatement = countStatement;
-		this.pageStatement = pageStatement;
-	}
-
-	@Override
-	public Long count(Object... params) throws SQLException {
-		return queryRunner.query(countStatement,
-				DefaultHandlers.DEFAULT_NUM_HANDLER, params).longValue();
+		super(queryRunner, dialect, orignalStatement, countStatement,
+				pageStatement);
 	}
 
 	@Override
@@ -43,13 +23,12 @@ public class LongHashMapListQueryImpl implements LongMapListQuery {
 	}
 
 	@Override
-	public List<Map<String, Object>> page(Long first, Long countOfPerPage,
-			Object... params) throws SQLException {
+	public List<Map<String, Object>> page(Integer first,
+			Integer countOfPerPage, Object... params) throws SQLException {
 		return queryRunner
 				.query(pageStatement, DefaultHandlers.DEFAULT_MAP_LIST_HANDLER,
 						this.dialect.transformPageParameters(first,
 								countOfPerPage, params));
-
 	}
 
 	@Override

@@ -3,21 +3,15 @@ package com.huatek.unicorn.base.dbaccess.queryfactory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
-
-import org.hsqldb.jdbc.JDBCDataSourceFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.huatek.unicorn.base.dbaccess.dialect.HsqldbDialect;
 import com.huatek.unicorn.base.dbaccess.factory.impl.DefaultDbaccessFactory;
-import com.huatek.unicorn.base.dbaccess.modification.IntegerObjectsListModification;
-import com.huatek.unicorn.base.dbaccess.query.IntegerMapListQuery;
-import com.huatek.unicorn.base.dbaccess.query.LongMapListQuery;
+import com.huatek.unicorn.base.dbaccess.modification.Modification;
+import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 import com.huatek.unicorn.base.dbaccess.test.HsqldbSimpleDataSource;
 
@@ -27,19 +21,18 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 
 	@BeforeClass
 	public static void prepare() throws Exception {
-		
-		
-		
-//		Properties props = new Properties();
-//		props.setProperty("url", "jdbc:hsqldb:mem:DefaultQueryFactoryTest");
-//		props.setProperty("user", null);
-//		props.setProperty("password", null);
-//		DataSource dataSource = JDBCDataSourceFactory.createDataSource(props);
-		
+
+		// Properties props = new Properties();
+		// props.setProperty("url", "jdbc:hsqldb:mem:DefaultQueryFactoryTest");
+		// props.setProperty("user", null);
+		// props.setProperty("password", null);
+		// DataSource dataSource =
+		// JDBCDataSourceFactory.createDataSource(props);
+
 		queryFactory = new DefaultDbaccessFactory();
 		queryFactory.setConfigPaths(new String[] { "/dao_config.xml" });
 		// DriverManager.get
-//		queryFactory.setDataSource(dataSource);
+		// queryFactory.setDataSource(dataSource);
 		queryFactory.setDataSource(new HsqldbSimpleDataSource(
 				"jdbc:hsqldb:mem:DefaultQueryFactoryTest"));
 
@@ -51,16 +44,16 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 			e.printStackTrace();
 		}
 
-		IntegerObjectsListModification integerObjectsListModification = queryFactory
-				.getIntegerObjectsListModification("createTableXXX");
-		integerObjectsListModification.modify();
+		Modification<Object[]> objectsModification = queryFactory
+				.getModification("createTableXXX");
+		objectsModification.merge();
 	}
 
 	@AfterClass
 	public static void destory() throws Exception {
-		IntegerObjectsListModification integerObjectsListModification = queryFactory
-				.getIntegerObjectsListModification("dropTableXXX");
-		integerObjectsListModification.modify();
+		Modification<Object[]> objectsModification = queryFactory
+				.getModification("dropTableXXX");
+		objectsModification.merge();
 	}
 
 	// @Test
@@ -138,34 +131,32 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 	// System.out.println(count);
 	//
 	// }
-	
+
 	@Test
 	public void testInsert() throws Exception {
-		IntegerObjectsListModification integerObjectsListModification = queryFactory
-				.getIntegerObjectsListModification("insertXxx");
+		Modification<Object[]> objectsModification = queryFactory
+				.getModification("insertXxx");
 		String[] strs = new String[10];
 		Arrays.fill(strs, "testes");
-		integerObjectsListModification.modify(strs);
-		
-		IntegerMapListQuery integerMapListQuery = queryFactory
-				.getIntegerMapListQuery("selectXxx");
-		System.out.println(integerMapListQuery.count());
+		objectsModification.merge(strs);
+
+		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
+		System.out.println(query.count());
 	}
-	
+
 	@Test
 	public void testBatchInsert() throws Exception {
-		IntegerObjectsListModification integerObjectsListModification = queryFactory
-				.getIntegerObjectsListModification("insertXxx");
+		Modification<Object[]> objectsModification = queryFactory
+				.getModification("insertXxx");
 		String[] strs = new String[10];
 		Object[][] strsArr = new String[100000][];
 		Arrays.fill(strs, "testes");
 		Arrays.fill(strsArr, strs);
-		
-		integerObjectsListModification.batch(Arrays.asList(strsArr));
-		
-		IntegerMapListQuery integerMapListQuery = queryFactory
-				.getIntegerMapListQuery("selectXxx");
-		System.out.println(integerMapListQuery.count());
+
+		objectsModification.batch(Arrays.asList(strsArr));
+
+		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
+		System.out.println(query.count());
 	}
 
 	@Test
@@ -173,13 +164,13 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 
 		int loops = 1000 * 1;
 
-		IntegerMapListQuery integerMapListQuery = queryFactory
-				.getIntegerMapListQuery("selectSysTables");
-		System.out.println(integerMapListQuery);
+		Query<Map<String, Object>> query = queryFactory
+				.getQuery("selectSysTables");
+		System.out.println(query);
 
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < loops; i++) {
-			List<Map<String, Object>> result = integerMapListQuery.all();
+			List<Map<String, Object>> result = query.all();
 		}
 		long finished = System.currentTimeMillis();
 

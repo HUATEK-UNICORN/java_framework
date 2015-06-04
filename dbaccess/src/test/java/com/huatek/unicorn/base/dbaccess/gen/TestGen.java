@@ -12,7 +12,7 @@ public class TestGen {
 	public static void main(String[] args) {
 
 		System.out.println(Type.getType(
-				com.huatek.unicorn.base.dbaccess.query.ArrayQuery.class)
+				com.huatek.unicorn.base.dbaccess.query.Query.class)
 				.getDescriptor());
 
 		ClassWriter cw = new ClassWriter(0);
