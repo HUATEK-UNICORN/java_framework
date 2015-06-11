@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbAccessFactory>
+
+	<dataSourceProps>
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.128.163:1521:undb" />
+		<property name="username" value="testins" />
+		<property name="password" value="6yhn*IK&lt;" />
+		<property name="maxTotal" value="40" />
+		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />
+		<property name="minEvictableIdleTimeMillis" value="320000" />
+	</dataSourceProps>
+
+
+	<dialect>com.huatek.unicorn.base.dbaccess.dialect.OracleDialect
+	</dialect>
+
+	<statementConfigs>
+		<path>/oracle_config.xml</path>
+	</statementConfigs>
+
+</dbAccessFactory>

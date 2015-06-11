@@ -4,46 +4,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp2.PoolableConnection;
-import org.apache.commons.dbcp2.PoolableConnectionFactory;
-import org.apache.commons.dbcp2.PoolingDataSource;
-import org.apache.commons.pool2.ObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.huatek.unicorn.base.dbaccess.dialect.OracleDialect;
-import com.huatek.unicorn.base.dbaccess.factory.impl.DefaultDbaccessFactory;
+import com.huatek.unicorn.base.dbaccess.define.DbAccessFactoryConfig;
+import com.huatek.unicorn.base.dbaccess.factory.DbaccessFactory;
 import com.huatek.unicorn.base.dbaccess.modification.Modification;
 import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
 public class OracleQueryFactoryTest extends BaseTestCase {
 
-	private static DefaultDbaccessFactory queryFactory;
+	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
 
 	@BeforeClass
 	public static void prepare() throws Exception {
 
 		System.out.print("prepare...");
 
-		queryFactory = new DefaultDbaccessFactory();
-		queryFactory.setConfigPaths(new String[] { "/oracle_config.xml" });
-		// queryFactory
-		// .setDataSource(setupDataSource("jdbc:oracle:thin:@192.168.128.163:1521:undb"));
-		queryFactory.setDataSource(setupPoolDataSource(
-				"jdbc:oracle:thin:@192.168.128.163:1521:undb", "testins",
-				"6yhn*IK<"));
-		queryFactory.setDialect(new OracleDialect());
+		DbAccessFactoryConfig conf = DbAccessFactoryConfig.configure("/ora_daf_config.xml"); 
 
 		try {
-			queryFactory.init();
+			queryFactory = conf.build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,15 +53,6 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 		Modification<Object[]> dropTableXXX = queryFactory
 				.getModification("dropTableXXX");
 		dropTableXXX.merge();
-	}
-
-	public static DataSource setupDataSource(String connectURI) {
-		BasicDataSource ds = new BasicDataSource();
-		ds.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-		ds.setUsername("testins");
-		ds.setPassword("6yhn*IK<");
-		ds.setUrl(connectURI);
-		return ds;
 	}
 
 	@Test
@@ -196,24 +170,4 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 	// System.out
 	// .println("--------------------------------------------------------------");
 	// }
-
-	public static DataSource setupPoolDataSource(String connectURI,
-			String username, String password) {
-
-		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-				connectURI, username, password);
-
-		PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
-				connectionFactory, null);
-
-		ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<PoolableConnection>(
-				poolableConnectionFactory);
-
-		poolableConnectionFactory.setPool(connectionPool);
-
-		PoolingDataSource<PoolableConnection> dataSource = new PoolingDataSource<>(
-				connectionPool);
-
-		return dataSource;
-	}
 }

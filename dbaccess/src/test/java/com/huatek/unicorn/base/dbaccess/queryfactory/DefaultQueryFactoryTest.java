@@ -8,16 +8,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.huatek.unicorn.base.dbaccess.dialect.HsqldbDialect;
-import com.huatek.unicorn.base.dbaccess.factory.impl.DefaultDbaccessFactory;
+import com.huatek.unicorn.base.dbaccess.define.DbAccessFactoryConfig;
+import com.huatek.unicorn.base.dbaccess.factory.DbaccessFactory;
 import com.huatek.unicorn.base.dbaccess.modification.Modification;
 import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
-import com.huatek.unicorn.base.dbaccess.test.HsqldbSimpleDataSource;
 
 public class DefaultQueryFactoryTest extends BaseTestCase {
 
-	private static DefaultDbaccessFactory queryFactory;
+	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
 
 	@BeforeClass
 	public static void prepare() throws Exception {
@@ -29,17 +28,10 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 		// DataSource dataSource =
 		// JDBCDataSourceFactory.createDataSource(props);
 
-		queryFactory = new DefaultDbaccessFactory();
-		queryFactory.setConfigPaths(new String[] { "/dao_config.xml" });
-		// DriverManager.get
-		// queryFactory.setDataSource(dataSource);
-		queryFactory.setDataSource(new HsqldbSimpleDataSource(
-				"jdbc:hsqldb:mem:DefaultQueryFactoryTest"));
-
-		queryFactory.setDialect(new HsqldbDialect());
+		DbAccessFactoryConfig conf = DbAccessFactoryConfig.configure(); 
 
 		try {
-			queryFactory.init();
+			queryFactory = conf.build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

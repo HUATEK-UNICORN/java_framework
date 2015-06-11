@@ -10,5 +10,9 @@ public class DbaccessException extends Exception {
 	public DbaccessException(String message) {
 		super(message);
 	}
+	
+	public DbaccessException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

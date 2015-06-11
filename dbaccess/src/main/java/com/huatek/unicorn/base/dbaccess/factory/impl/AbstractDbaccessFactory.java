@@ -36,7 +36,7 @@ public abstract class AbstractDbaccessFactory<E, P> implements
 
 	protected String[] configPaths;
 
-	public void init() throws Exception {
+	protected void init() throws DbaccessException {
 
 		if (null == configPaths || EMPTY_ARRAY_LENGTH >= configPaths.length) {
 			throw new DbaccessException(
@@ -177,35 +177,5 @@ public abstract class AbstractDbaccessFactory<E, P> implements
 	abstract Modification<P> instanceModification(
 			StatementDefine statementDefine);
 
-	public Dialect getDialect() {
-		return dialect;
-	}
 
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
-	}
-
-	public String[] getConfigPaths() {
-		return configPaths;
-	}
-
-	public void setConfigPaths(String[] configPaths) {
-		this.configPaths = configPaths;
-	}
-
-	public QueryRunner getQueryRunner() {
-		return queryRunner;
-	}
-
-	public void setQueryRunner(QueryRunner queryRunner) {
-		this.queryRunner = queryRunner;
-	}
-
-	public DataSource getDataSource() {
-		return dataSource;
-	}
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 }

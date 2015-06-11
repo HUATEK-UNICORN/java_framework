@@ -4,45 +4,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp2.PoolableConnection;
-import org.apache.commons.dbcp2.PoolableConnectionFactory;
-import org.apache.commons.dbcp2.PoolingDataSource;
-import org.apache.commons.pool2.ObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.huatek.unicorn.base.dbaccess.dialect.HsqldbDialect;
-import com.huatek.unicorn.base.dbaccess.factory.impl.DefaultDbaccessFactory;
+import com.huatek.unicorn.base.dbaccess.define.DbAccessFactoryConfig;
+import com.huatek.unicorn.base.dbaccess.factory.DbaccessFactory;
 import com.huatek.unicorn.base.dbaccess.modification.Modification;
 import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
 public class HsqlQueryFactoryTest extends BaseTestCase {
 
-	private static DefaultDbaccessFactory queryFactory;
+	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
 
 	@BeforeClass
 	public static void prepare() throws Exception {
 
 		System.out.print("prepare...");
 
-		queryFactory = new DefaultDbaccessFactory();
-		queryFactory.setConfigPaths(new String[] { "/dao_config.xml" });
-		// queryFactory
-		// .setDataSource(setupDataSource("jdbc:oracle:thin:@192.168.128.163:1521:undb"));
-		queryFactory.setDataSource(setupPoolDataSource(
-				"jdbc:hsqldb:mem:DefaultQueryFactoryTest", "testins",
-				"6yhn*IK<"));
-		queryFactory.setDialect(new HsqldbDialect());
+		DbAccessFactoryConfig conf = DbAccessFactoryConfig.configure(); 
 
 		try {
-			queryFactory.init();
+			queryFactory = conf.build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,7 +40,7 @@ public class HsqlQueryFactoryTest extends BaseTestCase {
 				.getModification("insertXxx");
 		int batchUnit = 64;
 		String[] strs = new String[30];
-		Object[][] strsArr = new String[200][];
+		Object[][] strsArr = new String[20][];
 		Arrays.fill(strs, "test1test2test3test4");
 		Arrays.fill(strsArr, strs);
 		objectsModification2.batch(Arrays.asList(strsArr), batchUnit);
@@ -91,23 +75,23 @@ public class HsqlQueryFactoryTest extends BaseTestCase {
 		System.out.println(" done.");
 	}
 
-	public static DataSource setupPoolDataSource(String connectURI,
-			String username, String password) {
-
-		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-				connectURI, username, password);
-
-		PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
-				connectionFactory, null);
-
-		ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<PoolableConnection>(
-				poolableConnectionFactory);
-
-		poolableConnectionFactory.setPool(connectionPool);
-
-		PoolingDataSource<PoolableConnection> dataSource = new PoolingDataSource<>(
-				connectionPool);
-
-		return dataSource;
-	}
+//	public static DataSource setupPoolDataSource(String connectURI,
+//			String username, String password) {
+//
+//		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
+//				connectURI, username, password);
+//
+//		PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
+//				connectionFactory, null);
+//
+//		ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<PoolableConnection>(
+//				poolableConnectionFactory);
+//
+//		poolableConnectionFactory.setPool(connectionPool);
+//
+//		PoolingDataSource<PoolableConnection> dataSource = new PoolingDataSource<>(
+//				connectionPool);
+//
+//		return dataSource;
+//	}
 }
