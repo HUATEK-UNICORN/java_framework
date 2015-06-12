@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface Modification<E> {
 
-	Integer merge() throws SQLException;
+	Integer modify() throws SQLException;
 
-	Integer merge(E data) throws SQLException;
+	Integer modify(E data) throws SQLException;
 
 	Integer batch(List<E> dataArray) throws SQLException;
 

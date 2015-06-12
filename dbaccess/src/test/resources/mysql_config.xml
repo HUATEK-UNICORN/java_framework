@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataaccess>
+	<statements>
+		<statement id="selectSysTables" type="query">
+			<![CDATA[
+			SELECT * FROM TABS
+			]]>
+		</statement>
+		
+		<statement id="selectSysTables2" type="query">
+			<![CDATA[
+			SELECT * FROM TABS where 1= 1
+			]]>
+		</statement>
+		
+		<statement id="createTableXXX" type="modification">
+			<![CDATA[
+			create table xxx (
+				b0 varchar(20),
+				b1 varchar(20),
+				b2 varchar(20),
+				b3 varchar(20),
+				b4 varchar(20),
+				b5 varchar(20),
+				b6 varchar(20),
+				b7 varchar(20),
+				b8 varchar(20),
+				b9 varchar(20)
+			)
+			]]>
+		</statement>
+		
+		<statement id="dropTableXXX" type="modification">
+			<![CDATA[
+			drop table xxx
+			]]>
+		</statement>
+		
+		<statement id="insertXxx" type="modification">
+			<![CDATA[
+			insert into xxx values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			]]>
+		</statement>
+		
+		<statement id="selectXxx" type="query">
+			<![CDATA[
+			SELECT * FROM xxx
+			]]>
+		</statement>
+		
+	</statements>
+
+</dataaccess>

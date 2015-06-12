@@ -33,7 +33,7 @@ public class HsqlQueryFactoryTest extends BaseTestCase {
 
 		Modification<Object[]> objectsModification = queryFactory
 				.getModification("createTableXXX");
-		objectsModification.merge();
+		objectsModification.modify();
 
 		// prepare data
 		Modification<Object[]> objectsModification2 = queryFactory
@@ -52,7 +52,7 @@ public class HsqlQueryFactoryTest extends BaseTestCase {
 	public static void destory() throws Exception {
 		Modification<Object[]> objectsModification = queryFactory
 				.getModification("dropTableXXX");
-		objectsModification.merge();
+		objectsModification.modify();
 	}
 
 	@Test

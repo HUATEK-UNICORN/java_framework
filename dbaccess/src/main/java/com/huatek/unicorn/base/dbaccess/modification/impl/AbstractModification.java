@@ -33,12 +33,12 @@ public abstract class AbstractModification<E> implements Modification<E> {
 	protected abstract Object[] paramsConvert(E data);
 
 	@Override
-	public Integer merge() throws SQLException {
+	public Integer modify() throws SQLException {
 		return queryRunner.update(orignalStatement);
 	}
 
 	@Override
-	public Integer merge(E data) throws SQLException {
+	public Integer modify(E data) throws SQLException {
 		return queryRunner.update(orignalStatement, paramsConvert(data));
 	}
 

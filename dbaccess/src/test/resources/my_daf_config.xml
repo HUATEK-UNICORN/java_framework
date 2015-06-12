@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbAccessFactory>
+
+	<dataSourceProps>
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://192.168.129.127/test" />
+		<property name="username" value="root" />
+		<property name="password" value="19801223" />
+		<property name="maxTotal" value="40" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />
+		<property name="minEvictableIdleTimeMillis" value="320000" />
+	</dataSourceProps>
+
+
+	<dialect>com.huatek.unicorn.base.dbaccess.dialect.MysqlDialect
+	</dialect>
+
+	<statementConfigs>
+		<path>/mysql_config.xml</path>
+	</statementConfigs>
+
+</dbAccessFactory>

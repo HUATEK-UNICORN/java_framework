@@ -38,14 +38,14 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 
 		Modification<Object[]> objectsModification = queryFactory
 				.getModification("createTableXXX");
-		objectsModification.merge();
+		objectsModification.modify();
 	}
 
 	@AfterClass
 	public static void destory() throws Exception {
 		Modification<Object[]> objectsModification = queryFactory
 				.getModification("dropTableXXX");
-		objectsModification.merge();
+		objectsModification.modify();
 	}
 
 	// @Test
@@ -130,7 +130,7 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 				.getModification("insertXxx");
 		String[] strs = new String[10];
 		Arrays.fill(strs, "testes");
-		objectsModification.merge(strs);
+		objectsModification.modify(strs);
 
 		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
 		System.out.println(query.count());

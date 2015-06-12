@@ -14,38 +14,44 @@ import com.huatek.unicorn.base.dbaccess.modification.Modification;
 import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
-public class OracleQueryFactoryTest extends BaseTestCase {
+public class MysqlQueryFactoryTest extends BaseTestCase {
 
 	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
 
 	@BeforeClass
-	public static void prepare() throws Exception {
-
-		System.out.print("prepare...");
-
-		DbAccessFactoryConfig conf = DbAccessFactoryConfig.configure("/ora_daf_config.xml"); 
+	public static void prepare() {
 
 		try {
-			queryFactory = conf.build();
+
+			System.out.print("prepare...");
+
+			DbAccessFactoryConfig conf = DbAccessFactoryConfig
+					.configure("/my_daf_config.xml");
+
+			try {
+				queryFactory = conf.build();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			Modification<Object[]> createTableXXX = queryFactory
+					.getModification("createTableXXX");
+			createTableXXX.modify();
+
+			// prepare data
+			Modification<Object[]> insertXxx = queryFactory
+					.getModification("insertXxx");
+			int batchUnit = 64;
+			String[] strs = new String[10];
+			Object[][] strsArr = new String[10000][];
+			Arrays.fill(strs, "test1test2test3test4");
+			Arrays.fill(strsArr, strs);
+			insertXxx.batch(Arrays.asList(strsArr), batchUnit);
+
+			System.out.println(" done.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		Modification<Object[]> createTableXXX = queryFactory
-				.getModification("createTableXXX");
-		createTableXXX.modify();
-
-		// prepare data
-		Modification<Object[]> insertXxx = queryFactory
-				.getModification("insertXxx");
-		int batchUnit = 64;
-		String[] strs = new String[10];
-		Object[][] strsArr = new String[10000][];
-		Arrays.fill(strs, "test1test2test3test4");
-		Arrays.fill(strsArr, strs);
-		insertXxx.batch(Arrays.asList(strsArr), batchUnit);
-
-		System.out.println(" done.");
 	}
 
 	@AfterClass
@@ -60,8 +66,7 @@ public class OracleQueryFactoryTest extends BaseTestCase {
 
 		System.out.print("start testing...");
 
-		Query<Map<String, Object>> query = queryFactory
-				.getQuery("selectXxx");
+		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
 
 		long start = System.currentTimeMillis();
 
