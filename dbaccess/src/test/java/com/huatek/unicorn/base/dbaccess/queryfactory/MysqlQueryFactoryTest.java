@@ -2,7 +2,6 @@ package com.huatek.unicorn.base.dbaccess.queryfactory;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,7 +15,7 @@ import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
 public class MysqlQueryFactoryTest extends BaseTestCase {
 
-	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
+	private static DbaccessFactory<Object[], Object[]> queryFactory;
 
 	@BeforeClass
 	public static void prepare() {
@@ -66,12 +65,12 @@ public class MysqlQueryFactoryTest extends BaseTestCase {
 
 		System.out.print("start testing...");
 
-		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
+		Query<Object[]> query = queryFactory.getQuery("selectXxx");
 
 		long start = System.currentTimeMillis();
 
 		for (int i = 0; i < 100; i++) {
-			List<Map<String, Object>> m = query.all();
+			List<Object[]> m = query.all();
 		}
 
 		long finished = System.currentTimeMillis();

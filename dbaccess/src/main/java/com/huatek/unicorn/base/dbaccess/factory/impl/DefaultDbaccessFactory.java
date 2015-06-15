@@ -1,7 +1,5 @@
 package com.huatek.unicorn.base.dbaccess.factory.impl;
 
-import java.util.Map;
-
 import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.QueryRunner;
@@ -12,14 +10,22 @@ import com.huatek.unicorn.base.dbaccess.exception.DbaccessException;
 import com.huatek.unicorn.base.dbaccess.modification.Modification;
 import com.huatek.unicorn.base.dbaccess.modification.impl.ObjectsModification;
 import com.huatek.unicorn.base.dbaccess.query.Query;
-import com.huatek.unicorn.base.dbaccess.query.impl.MapQueryImpl;
+import com.huatek.unicorn.base.dbaccess.query.impl.ArrayQueryImpl;
 
 public class DefaultDbaccessFactory extends
-		AbstractDbaccessFactory<Map<String, Object>, Object[]> {
+		AbstractDbaccessFactory<Object[], Object[]> {
 
+//	@Override
+//	Query<Map<String, Object>> instanceQuery(StatementDefine statementDefine) {
+//		return new MapQueryImpl(queryRunner, dialect,
+//				statementDefine.getStatement(),
+//				dialect.generateCountStatement(statementDefine.getStatement()),
+//				dialect.generatePageStatement(statementDefine.getStatement()));
+//	}
+	
 	@Override
-	Query<Map<String, Object>> instanceQuery(StatementDefine statementDefine) {
-		return new MapQueryImpl(queryRunner, dialect,
+	Query<Object[]> instanceQuery(StatementDefine statementDefine) {
+		return new ArrayQueryImpl(queryRunner, dialect,
 				statementDefine.getStatement(),
 				dialect.generateCountStatement(statementDefine.getStatement()),
 				dialect.generatePageStatement(statementDefine.getStatement()));

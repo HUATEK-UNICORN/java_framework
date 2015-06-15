@@ -4,9 +4,9 @@ import static com.huatek.unicorn.base.dbaccess.define.Const.*;
 
 public class MysqlDialect implements Dialect {
 
-	private static final String PAGE_STMT_PREFIX = " SELECT * FROM ( SELECT UNICORN_INNER_TAB.*, rownum AS UNICORN_INNER_ROWNUM FROM ( ";
+	private static final String PAGE_STMT_PREFIX = " SELECT * FROM ( ";
 
-	private static final String PAGE_STMT_SUFFIX = " ) UNICORN_INNER_TAB ) UNICORN_EXTERNAL_TAB WHERE UNICORN_EXTERNAL_TAB.UNICORN_INNER_ROWNUM >= ? AND UNICORN_EXTERNAL_TAB.UNICORN_INNER_ROWNUM < ? ";
+	private static final String PAGE_STMT_SUFFIX = " ) UNICORN_INNER_TAB LIMIT ?, ?";
 
 	private static final String COUNT_STMT_PREFIX = " SELECT SUM(1) AS COUNTER FROM ( ";
 

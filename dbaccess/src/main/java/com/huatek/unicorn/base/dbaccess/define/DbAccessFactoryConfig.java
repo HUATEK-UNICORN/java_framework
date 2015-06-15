@@ -2,7 +2,6 @@ package com.huatek.unicorn.base.dbaccess.define;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -70,7 +69,7 @@ public class DbAccessFactoryConfig {
 		return dbAccessFactoryConfig;
 	}
 
-	public DbaccessFactory<Map<String, Object>, Object[]> build()
+	public DbaccessFactory<Object[], Object[]> build()
 			throws DbaccessException {
 
 		DefaultDbaccessFactory defaultDbaccessFactory = new DefaultDbaccessFactory();

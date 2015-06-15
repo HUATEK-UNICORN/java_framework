@@ -1,6 +1,8 @@
 package com.huatek.unicorn.base.dbaccess.query.impl;
 
 import org.apache.commons.dbutils.RowProcessor;
+import org.apache.commons.dbutils.handlers.ArrayHandler;
+import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -18,4 +20,8 @@ public final class DefaultHandlers {
 			DEFAULT_ROW_PROCESSOR);
 
 	static final ScalarHandler<Number> DEFAULT_NUM_HANDLER = new ScalarHandler<Number>();
+	
+	static final ArrayHandler DEFAULT_ARR_HANDLER = new ArrayHandler();
+	
+	static final ArrayListHandler DEFAULT_ARR_LIST_HANDLER = new ArrayListHandler();
 }

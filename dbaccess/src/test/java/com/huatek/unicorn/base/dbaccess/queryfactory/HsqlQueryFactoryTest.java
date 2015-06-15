@@ -16,7 +16,7 @@ import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
 public class HsqlQueryFactoryTest extends BaseTestCase {
 
-	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
+	private static DbaccessFactory<Object[], Object[]> queryFactory;
 
 	@BeforeClass
 	public static void prepare() throws Exception {
@@ -60,13 +60,13 @@ public class HsqlQueryFactoryTest extends BaseTestCase {
 
 		System.out.print("start testing...");
 
-		Query<Map<String, Object>> query = queryFactory
+		Query<Object[]> query = queryFactory
 				.getQuery("selectXxx");
 
 		long start = System.currentTimeMillis();
 
 		for (int i = 0; i < 100000; i++) {
-			List<Map<String, Object>> m = query.all();
+			List<Object[]> m = query.all();
 		}
 
 		long finished = System.currentTimeMillis();

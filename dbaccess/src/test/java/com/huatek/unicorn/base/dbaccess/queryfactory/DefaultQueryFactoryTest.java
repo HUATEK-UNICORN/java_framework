@@ -16,7 +16,7 @@ import com.huatek.unicorn.base.dbaccess.test.BaseTestCase;
 
 public class DefaultQueryFactoryTest extends BaseTestCase {
 
-	private static DbaccessFactory<Map<String, Object>, Object[]> queryFactory;
+	private static DbaccessFactory<Object[], Object[]> queryFactory;
 
 	@BeforeClass
 	public static void prepare() throws Exception {
@@ -132,7 +132,7 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 		Arrays.fill(strs, "testes");
 		objectsModification.modify(strs);
 
-		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
+		Query<Object[]> query = queryFactory.getQuery("selectXxx");
 		System.out.println(query.count());
 	}
 
@@ -147,7 +147,7 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 
 		objectsModification.batch(Arrays.asList(strsArr));
 
-		Query<Map<String, Object>> query = queryFactory.getQuery("selectXxx");
+		Query<Object[]> query = queryFactory.getQuery("selectXxx");
 		System.out.println(query.count());
 	}
 
@@ -156,13 +156,13 @@ public class DefaultQueryFactoryTest extends BaseTestCase {
 
 		int loops = 1000 * 1;
 
-		Query<Map<String, Object>> query = queryFactory
+		Query<Object[]> query = queryFactory
 				.getQuery("selectSysTables");
 		System.out.println(query);
 
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < loops; i++) {
-			List<Map<String, Object>> result = query.all();
+			List<Object[]> result = query.all();
 		}
 		long finished = System.currentTimeMillis();
 
