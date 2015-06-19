@@ -3,9 +3,9 @@
 
 	<dataSourceProps>
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://192.168.129.127/test" />
-		<property name="username" value="root" />
-		<property name="password" value="19801223" />
+		<property name="url" value="jdbc:mysql://192.168.56.101/test" />
+		<property name="username" value="myadmin" />
+		<property name="password" value="myadmin" />
 		<property name="maxTotal" value="40" />
 		<property name="validationQuery" value="SELECT 1" />
 		<property name="testWhileIdle" value="true" />
