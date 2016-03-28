@@ -10,9 +10,9 @@ import com.huatek.unicorn.base.dbaccess.modification.impl.ObjectsModification;
 import com.huatek.unicorn.base.dbaccess.query.Query;
 import com.huatek.unicorn.base.dbaccess.query.impl.ArrayQueryImpl;
 
-public class DefaultDbaccessFactory extends
+public class SpringDbaccessFactory extends
 		AbstractDbaccessFactory<Object[], Object[]> {
-	
+
 	@Override
 	Query<Object[]> instanceQuery(StatementDefine statementDefine) {
 		return new ArrayQueryImpl(queryRunner, dialect,
@@ -29,18 +29,11 @@ public class DefaultDbaccessFactory extends
 	
 	public void init() throws DbaccessException {
 		super.init();
-	}
-
-	public Dialect getDialect() {
-		return dialect;
+		
 	}
 
 	public void setDialect(Dialect dialect) {
 		this.dialect = dialect;
-	}
-
-	public String[] getConfigPaths() {
-		return configPaths;
 	}
 
 	public void setConfigPaths(String[] configPaths) {
