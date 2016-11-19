@@ -27,11 +27,14 @@ public abstract class AbstractQuery<E> implements Query<E> {
 		this.countStatement = countStatement;
 		this.pageStatement = pageStatement;
 	}
-	
+
 	@Override
 	public Integer count(Object... params) throws SQLException {
-		return queryRunner.query(countStatement,
-				DefaultHandlers.DEFAULT_NUM_HANDLER, params).intValue();
+
+		Number n = queryRunner.query(countStatement,
+				DefaultHandlers.DEFAULT_NUM_HANDLER, params);
+
+		return null == n ? 0 : n.intValue();
 	}
 
 }
